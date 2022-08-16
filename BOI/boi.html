@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BOI Roguelike</title>
+        <link href = "./style.css" rel = "stylesheet">
+        <link rel = "icon" href = "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>♱</text></svg>">
+    </head>
+    <body>
+        <canvas id = "canv"></canvas>
+        <script type = "module">
+            "use strict"
+            import {getCanvas} from "./Engine/scripts.js";
+            import Time from "./Engine/Time.js";
+            import Input from "./Engine/Input.js";
+            import Game from "./Engine/Game.js";
+            import startScene from "./Game/startScene.js";
+            import SceneOne from "./Game/SceneOne.js";
+            import DeathScene from "./Game/DeathScene.js";
+            import ItemRoomScene from "./Game/ItemRoomScene.js";
+
+            Input.attach(document);
+
+            let {canvas, ctx} = getCanvas();
+
+            let starScene = new startScene();
+            Game.scenes.push(starScene);
+            let deathScene = new DeathScene();
+            Game.scenes.push(deathScene);
+            Game.changeScene(0);
+
+            function tick(){
+                Game.updateScene();
+                Input.update();
+                update();
+                draw(ctx);
+                Game.scene().remove()
+                Time.timePassed += Time.secondsBetweenFrame;
+            }
+            
+            function update(){
+                Game.scene().update();
+            }
+
+            function draw(){
+                Game.scene().draw(ctx);
+            }
+
+            setInterval(tick, Time.millisecondsBetweenFrames);
+        </script>
+    </body>
+</html>
